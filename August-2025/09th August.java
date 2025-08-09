@@ -1,24 +1,13 @@
 class Solution {
     int getLongestPrefix(String s) {
-        int n = s.length();
-        int i = 0;
-        int j = n-1;
-        int pos = n-1;
-        int ans = 0;
-        while(j<n && pos>0) {
-            if(s.charAt(i) == s.charAt(j)) {
-                i++;
-                j++;
-                ans++;
-            }
-            else {
-                i=0;
-                pos--;
-                j=pos;
-                ans = 0;
-            }
+        int n = s.length(), l = 0, r = 0, ans = -1;
+        int[] z = new int[n];
+        for (int i = 1; i < n; i++) {
+            if (i <= r) z[i] = Math.min(r - i + 1, z[i - l]);
+            while (i + z[i] < n && s.charAt(z[i]) == s.charAt(i + z[i])) z[i]++;
+            if (i + z[i] - 1 > r) { l = i; r = i + z[i] - 1; }
+            if (z[i] == n - i) ans = i;
         }
-        if(pos == 0) return -1;
-        return n-ans;
+        return ans;
     }
-}};
+}
